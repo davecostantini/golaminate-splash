@@ -62,24 +62,31 @@ nav {
 }
 .btn-nav-acid:hover { background: var(--white); }
 
+/* HERO WRAPPER */
+.hero-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  position: relative;
+  overflow: hidden;
+  background-image: linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);
+  background-size: 80px 80px;
+}
+
 /* HERO */
 .hero {
-  min-height: 100vh;
-  display: grid; grid-template-columns: 1fr 1fr;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
-  padding: 120px 48px 80px;
-  position: relative;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  overflow: hidden; gap: 56px;
+  padding: 120px 48px;
+  gap: 56px;
   max-width: 1100px;
-  margin: 0 auto;
+  width: 100%;
+  position: relative;
 }
-/* grid lines */
-.hero::before {
-  content: ''; position: absolute; inset: 0;
-  background-image: linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);
-  background-size: 80px 80px; pointer-events: none; z-index: 0;
-}
+/* grid lines now on .hero-wrapper */
 /* subtle top glow */
 .hero-bg-glow {
   position: absolute; top: -100px; left: 0; right: 0; height: 400px;
@@ -360,15 +367,151 @@ footer { padding: 32px 48px; border-top: 1px solid rgba(255,255,255,0.06); displ
 .cycle-word { display: none; color: var(--acid); }
 .cycle-word.active { display: inline; }
 
+/* CALLOUTS SECTION */
+.callouts-section {
+  padding: 120px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  position: relative;
+  overflow: hidden;
+  background: #060606;
+}
+.callouts-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+.callouts-label {
+  font-size: 9px; letter-spacing: 5px; text-transform: uppercase;
+  color: var(--acid); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px; opacity: 0.75;
+}
+.callouts-label::before { content: ''; display: block; width: 20px; height: 1px; background: var(--acid); }
+.callouts-title {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 600; letter-spacing: -0.03em;
+  color: var(--white); margin-bottom: 80px; line-height: 1.1;
+}
+.callouts-title span { color: var(--acid); }
+
+.callouts-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: 640px;
+}
+
+/* phone in center */
+.callouts-phone {
+  width: 260px;
+  height: 520px;
+  background: #111118;
+  border-radius: 36px;
+  border: 1.5px solid rgba(255,255,255,0.1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.8), 0 40px 80px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.07);
+  flex-shrink: 0;
+  z-index: 10;
+}
+.callouts-phone::before {
+  content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 80px; height: 22px; background: #111118;
+  border-radius: 0 0 14px 14px; z-index: 100;
+  border: 1.5px solid rgba(255,255,255,0.07); border-top: none;
+}
+.callouts-phone::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 120px;
+  background: linear-gradient(to top, #111118 0%, transparent 100%);
+  z-index: 50; pointer-events: none;
+}
+
+/* callout items */
+.callout {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  pointer-events: none;
+}
+.callout.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* left callouts — text then line then dot */
+.callout-left {
+  right: calc(50% + 140px);
+  flex-direction: row-reverse;
+}
+/* right callouts — dot then line then text */
+.callout-right {
+  left: calc(50% + 140px);
+  flex-direction: row;
+}
+
+.callout-text {
+  text-align: right;
+  max-width: 180px;
+}
+.callout-right .callout-text { text-align: left; }
+
+.callout-title {
+  font-size: 13px; font-weight: 600; color: var(--white);
+  letter-spacing: -0.01em; margin-bottom: 3px;
+}
+.callout-desc {
+  font-size: 11px; color: rgba(255,255,255,0.35);
+  font-weight: 300; line-height: 1.5;
+}
+.callout-line {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+}
+.callout-line-h {
+  height: 1px;
+  width: 60px;
+  background: linear-gradient(to right, rgba(200,255,0,0.6), rgba(200,255,0,0.2));
+}
+.callout-left .callout-line-h {
+  background: linear-gradient(to left, rgba(200,255,0,0.6), rgba(200,255,0,0.2));
+}
+.callout-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--acid); flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(200,255,0,0.6);
+}
+
+/* vertical positions for callouts */
+.callout-1 { top: 60px; }
+.callout-2 { top: 175px; }
+.callout-3 { top: 295px; }
+.callout-4 { top: 400px; }
+
 @media (max-width: 900px) {
-  nav { padding: 16px 24px; }
-  .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; gap: 48px; }
-  .hero-right { order: -1; }
-  .hero-left { align-items: center; text-align: center; }
-  .hero-body { text-align: center; }
-  .hero-cta { justify-content: center; }
-  .hero-proof { justify-content: center; }
+  nav { padding: 0 24px; }
+  .hero { grid-template-columns: 1fr; padding: 80px 24px 60px; gap: 40px; }
+  .hero-right { order: 2; }
+  .hero-left { align-items: flex-start; text-align: left; order: 1; }
+  .hero-body { text-align: left; }
+  .hero-cta { justify-content: flex-start; }
+  .hero-proof { justify-content: flex-start; }
   section { padding: 60px 24px; }
+  .callouts-section { padding: 60px 0; }
+  .callouts-inner { padding: 0 24px; }
+  .callouts-stage { flex-direction: column; min-height: auto; gap: 48px; }
+  .callout { position: static; opacity: 1; transform: none; flex-direction: row; }
+  .callout-left { flex-direction: row; }
+  .callout-text { text-align: left; }
+  .callout-line { display: none; }
+  .callouts-mobile-list { display: flex; flex-direction: column; gap: 24px; margin-top: 40px; }
   .feature-grid { grid-template-columns: 1fr; }
   .who-list { grid-template-columns: 1fr 1fr; }
   .made-by { grid-template-columns: 1fr; gap: 40px; padding: 60px 24px; }
@@ -392,6 +535,7 @@ footer { padding: 32px 48px; border-top: 1px solid rgba(255,255,255,0.06); displ
   </div>
 </nav>
 
+<div class="hero-wrapper">
 <div class="hero">
   <div class="hero-bg-glow"></div>
 
@@ -510,6 +654,7 @@ footer { padding: 32px 48px; border-top: 1px solid rgba(255,255,255,0.06); displ
     </div>
   </div>
 </div>
+</div><!-- end hero-wrapper -->
 
 <div class="ticker">
   <div class="ticker-inner">
@@ -534,7 +679,148 @@ footer { padding: 32px 48px; border-top: 1px solid rgba(255,255,255,0.06); displ
   </div>
 </div>
 
-<section id="features">
+</div>
+
+<!-- CALLOUTS SECTION -->
+<div class="callouts-section" id="features">
+  <div class="callouts-inner">
+    <div class="callouts-label">How it works</div>
+    <div class="callouts-title">Everything your team needs,<br><span>built into one place.</span></div>
+
+    <!-- DESKTOP: phone with animated callouts -->
+    <div class="callouts-stage" id="callouts-stage">
+
+      <!-- LEFT CALLOUTS -->
+      <div class="callout callout-left callout-1" data-callout="1">
+        <div class="callout-text">
+          <div class="callout-title">Next show, always front and center</div>
+          <div class="callout-desc">Date, venue, city. No digging around.</div>
+        </div>
+        <div class="callout-line">
+          <div class="callout-line-h"></div>
+          <div class="callout-dot"></div>
+        </div>
+      </div>
+
+      <div class="callout callout-left callout-3" data-callout="3">
+        <div class="callout-text">
+          <div class="callout-title">Your whole crew, connected</div>
+          <div class="callout-desc">Teams with real-time collab and permissions.</div>
+        </div>
+        <div class="callout-line">
+          <div class="callout-line-h"></div>
+          <div class="callout-dot"></div>
+        </div>
+      </div>
+
+      <!-- PHONE -->
+      <div class="callouts-phone">
+        <div class="phone-screen" style="font-family:'Inter',sans-serif">
+          <!-- status bar -->
+          <div style="height:36px;padding:11px 16px 0;display:flex;align-items:center;justify-content:space-between;font-size:10px;font-weight:600;color:rgba(255,255,255,0.7)">
+            <span>9:41</span>
+            <svg width="20" height="11" viewBox="0 0 20 11" fill="none"><rect x="0.5" y="0.5" width="17" height="10" rx="3" stroke="rgba(255,255,255,0.3)"/><rect x="2" y="2" width="13" height="7" rx="2" fill="rgba(255,255,255,0.7)"/></svg>
+          </div>
+          <!-- header -->
+          <div style="padding:8px 14px 6px;display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#ebebeb;letter-spacing:-0.3px">Good evening, Jordan.</div>
+              <div style="font-size:9px;color:rgba(255,255,255,0.3);margin-top:1px">3 teams · 12 upcoming shows</div>
+            </div>
+            <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:white;position:relative">JR<div style="position:absolute;bottom:0;right:0;width:6px;height:6px;background:#c8ff00;border-radius:50%;border:1.5px solid #0c0c14"></div></div>
+          </div>
+          <!-- pills -->
+          <div style="padding:0 14px 8px;display:flex;gap:5px">
+            <div style="padding:3px 7px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.07);border-radius:20px;font-size:8px;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:3px"><div style="width:3px;height:3px;border-radius:50%;background:#c8ff00"></div>12 Shows</div>
+            <div style="padding:3px 7px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.07);border-radius:20px;font-size:8px;color:rgba(255,255,255,0.4)">3 Releases</div>
+            <div style="padding:3px 7px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.07);border-radius:20px;font-size:8px;color:rgba(255,255,255,0.4)">5 People</div>
+          </div>
+          <!-- next show -->
+          <div style="margin:0 12px 8px;background:linear-gradient(135deg,rgba(200,255,0,0.07),rgba(200,255,0,0.02));border:1px solid rgba(200,255,0,0.12);border-radius:9px;padding:8px 10px;display:flex;align-items:center;gap:7px">
+            <div style="background:rgba(200,255,0,0.1);border-radius:5px;padding:3px 5px;text-align:center;min-width:26px"><div style="font-size:6px;font-weight:700;color:#c8ff00;letter-spacing:0.1em;text-transform:uppercase">APR</div><div style="font-size:13px;font-weight:700;color:#c8ff00;line-height:1">18</div></div>
+            <div style="flex:1"><div style="font-size:10px;font-weight:600;color:#ebebeb">Madison Square Garden</div><div style="font-size:8px;color:rgba(255,255,255,0.3);margin-top:1px">New York, NY</div></div>
+            <div style="font-size:6px;font-weight:700;color:#c8ff00;background:rgba(200,255,0,0.1);padding:2px 5px;border-radius:3px;text-transform:uppercase">Next</div>
+          </div>
+          <!-- teams label -->
+          <div style="padding:0 14px 5px;font-size:7px;font-weight:600;letter-spacing:0.08em;color:rgba(255,255,255,0.2);text-transform:uppercase">Your Teams</div>
+          <!-- team 1 -->
+          <div style="margin:0 12px 5px;background:#16161f;border-radius:8px;border:1px solid rgba(255,255,255,0.06);padding:8px 10px;display:flex;align-items:center;gap:7px">
+            <div style="width:20px;height:20px;border-radius:4px;background:linear-gradient(135deg,#7C3AED,#5b21b6);flex-shrink:0"></div>
+            <div style="flex:1"><div style="font-size:10px;font-weight:600;color:#ebebeb;display:flex;align-items:center;gap:4px">Nova Wave <span style="font-size:6px;font-weight:600;padding:1px 3px;border-radius:2px;background:rgba(124,58,237,0.2);color:#a78bfa;text-transform:uppercase">Artist</span></div><div style="font-size:8px;color:rgba(255,255,255,0.25);margin-top:1px">8 members · 5 shows</div></div>
+            <span style="color:rgba(255,255,255,0.2);font-size:10px">›</span>
+          </div>
+          <!-- team 2 -->
+          <div style="margin:0 12px 5px;background:#16161f;border-radius:8px;border:1px solid rgba(255,255,255,0.06);padding:8px 10px;display:flex;align-items:center;gap:7px">
+            <div style="width:20px;height:20px;border-radius:4px;background:linear-gradient(135deg,#0ea5e9,#0369a1);flex-shrink:0"></div>
+            <div style="flex:1"><div style="font-size:10px;font-weight:600;color:#ebebeb;display:flex;align-items:center;gap:4px">Apex Records <span style="font-size:6px;font-weight:600;padding:1px 3px;border-radius:2px;background:rgba(59,130,246,0.2);color:#93c5fd;text-transform:uppercase">Label</span></div><div style="font-size:8px;color:rgba(255,255,255,0.25);margin-top:1px">4 members · 7 shows</div></div>
+            <span style="color:rgba(255,255,255,0.2);font-size:10px">›</span>
+          </div>
+          <!-- activity -->
+          <div style="padding:6px 14px;display:flex;gap:7px;align-items:flex-start;border-bottom:1px solid rgba(255,255,255,0.03)">
+            <div style="width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#f59e0b,#d97706);display:flex;align-items:center;justify-content:center;font-size:6px;font-weight:700;color:white;flex-shrink:0">MK</div>
+            <div><div style="font-size:9px;color:rgba(255,255,255,0.4);line-height:1.4"><strong style="color:rgba(255,255,255,0.7);font-weight:500">Marcus K.</strong> added you to MSG guest list</div><div style="font-size:7px;color:rgba(255,255,255,0.2);margin-top:1px">2 min ago</div></div>
+          </div>
+          <!-- nav -->
+          <div style="position:absolute;bottom:0;left:0;right:0;height:56px;background:#13131c;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:flex-start;padding-top:8px">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 7L8 2L14 7V14H10V10H6V14H2V7Z" fill="#c8ff00"/></svg><div style="font-size:7px;color:#c8ff00;font-weight:500">Home</div></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" fill="none"/><line x1="5" y1="5" x2="11" y2="5" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" stroke-linecap="round"/></svg><div style="font-size:7px;color:rgba(255,255,255,0.2);font-weight:500">Schedule</div></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="3" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" fill="none"/><path d="M2 14c0-3 2.7-5 6-5s6 2 6 5" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg><div style="font-size:7px;color:rgba(255,255,255,0.2);font-weight:500">People</div></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 2h12a1 1 0 011 1v8a1 1 0 01-1 1H5l-3 3V3a1 1 0 011-1z" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" fill="none"/></svg><div style="font-size:7px;color:rgba(255,255,255,0.2);font-weight:500">Messages</div></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1.5L9.6 5.8L14 6.3L10.8 9.3L11.7 14L8 11.8L4.3 14L5.2 9.3L2 6.3L6.4 5.8L8 1.5Z" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" fill="none"/></svg><div style="font-size:7px;color:rgba(255,255,255,0.2);font-weight:500">Backstage</div></div>
+          </div>
+          <div style="position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:70px;height:2.5px;background:rgba(255,255,255,0.18);border-radius:2px"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT CALLOUTS -->
+      <div class="callout callout-right callout-2" data-callout="2">
+        <div class="callout-line">
+          <div class="callout-dot"></div>
+          <div class="callout-line-h"></div>
+        </div>
+        <div class="callout-text">
+          <div class="callout-title">Real-time activity feed</div>
+          <div class="callout-desc">Know the moment your crew makes a move.</div>
+        </div>
+      </div>
+
+      <div class="callout callout-right callout-4" data-callout="4">
+        <div class="callout-line">
+          <div class="callout-dot"></div>
+          <div class="callout-line-h"></div>
+        </div>
+        <div class="callout-text">
+          <div class="callout-title">Five tabs, everything covered</div>
+          <div class="callout-desc">Schedule, people, messages, and Backstage — all one tap away.</div>
+        </div>
+      </div>
+
+    </div><!-- end callouts-stage -->
+
+    <!-- MOBILE: simple feature list -->
+    <div class="callouts-mobile-list" style="display:none">
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="width:6px;height:6px;border-radius:50%;background:#c8ff00;flex-shrink:0;margin-top:5px;box-shadow:0 0 8px rgba(200,255,0,0.6)"></div>
+        <div><div style="font-size:14px;font-weight:600;color:#ebebeb;margin-bottom:4px">Next show, always front and center</div><div style="font-size:12px;color:rgba(255,255,255,0.35);line-height:1.6">Date, venue, city. No digging around.</div></div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="width:6px;height:6px;border-radius:50%;background:#c8ff00;flex-shrink:0;margin-top:5px;box-shadow:0 0 8px rgba(200,255,0,0.6)"></div>
+        <div><div style="font-size:14px;font-weight:600;color:#ebebeb;margin-bottom:4px">Real-time activity feed</div><div style="font-size:12px;color:rgba(255,255,255,0.35);line-height:1.6">Know the moment your crew makes a move.</div></div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="width:6px;height:6px;border-radius:50%;background:#c8ff00;flex-shrink:0;margin-top:5px;box-shadow:0 0 8px rgba(200,255,0,0.6)"></div>
+        <div><div style="font-size:14px;font-weight:600;color:#ebebeb;margin-bottom:4px">Your whole crew, connected</div><div style="font-size:12px;color:rgba(255,255,255,0.35);line-height:1.6">Teams with real-time collab and permissions.</div></div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start">
+        <div style="width:6px;height:6px;border-radius:50%;background:#c8ff00;flex-shrink:0;margin-top:5px;box-shadow:0 0 8px rgba(200,255,0,0.6)"></div>
+        <div><div style="font-size:14px;font-weight:600;color:#ebebeb;margin-bottom:4px">Five tabs, everything covered</div><div style="font-size:12px;color:rgba(255,255,255,0.35);line-height:1.6">Schedule, people, messages, and Backstage — all one tap away.</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<section>
   <div class="section-label">What It Does</div>
   <div class="feature-grid">
     <div class="feature-block" data-num="01"><span class="feature-icon">— Organize</span><div class="feature-title">Your world in one place.</div><p class="feature-body">Shows, releases, tour dates, advancing details, guest lists, travel. Everything your career needs — organized, shareable, and always up to date.</p></div>
@@ -596,7 +882,35 @@ footer { padding: 32px 48px; border-top: 1px solid rgba(255,255,255,0.06); displ
     }, 800);
   });
 
-  // 16mm film grain
+  // Scroll-triggered callouts
+  const callouts = document.querySelectorAll('.callout');
+  const mobileList = document.querySelector('.callouts-mobile-list');
+  const stage = document.getElementById('callouts-stage');
+
+  // show mobile list on small screens
+  function checkMobile() {
+    const isMobile = window.innerWidth < 900;
+    if (mobileList) mobileList.style.display = isMobile ? 'flex' : 'none';
+    if (stage) stage.style.display = isMobile ? 'none' : 'flex';
+  }
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+
+  // IntersectionObserver for staggered callout reveal
+  const calloutObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const allCallouts = document.querySelectorAll('.callout');
+        allCallouts.forEach((el, i) => {
+          setTimeout(() => el.classList.add('visible'), i * 300);
+        });
+        calloutObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const calloutsSection = document.querySelector('.callouts-section');
+  if (calloutsSection) calloutObserver.observe(calloutsSection);
   const canvas = document.getElementById('film-grain');
   const ctx = canvas.getContext('2d');
   function resizeCanvas() {

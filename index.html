@@ -499,19 +499,25 @@ footer { padding: 32px 48px; border-top: 1px solid rgba(255,255,255,0.06); displ
   nav { padding: 0 24px; }
   .hero { grid-template-columns: 1fr; padding: 80px 24px 60px; gap: 40px; }
   .hero-right { order: 2; }
-  .hero-left { align-items: flex-start; text-align: left; order: 1; }
-  .hero-body { text-align: left; }
-  .hero-cta { justify-content: flex-start; }
-  .hero-proof { justify-content: flex-start; }
+  .hero-left { align-items: center; text-align: center; order: 1; }
+  .hero-pill { margin-left: auto; margin-right: auto; }
+  .hero-body { text-align: center; }
+  .hero-cta { justify-content: center; }
+  .hero-proof { justify-content: center; }
   section { padding: 60px 24px; }
+
+  /* How It Works: header above phone, dots list below */
   .callouts-section { padding: 60px 0; }
-  .callouts-inner { padding: 0 24px; }
+  .callouts-inner { padding: 0 24px; display: flex; flex-direction: column; align-items: center; }
+  .callouts-label { align-self: flex-start; }
+  .callouts-title { text-align: left; align-self: flex-start; margin-bottom: 40px; }
   .callouts-stage { flex-direction: column; min-height: auto; gap: 48px; }
   .callout { position: static; opacity: 1; transform: none; flex-direction: row; }
   .callout-left { flex-direction: row; }
   .callout-text { text-align: left; }
   .callout-line { display: none; }
-  .callouts-mobile-list { display: flex; flex-direction: column; gap: 24px; margin-top: 40px; }
+  .callouts-mobile-list { display: flex; flex-direction: column; gap: 24px; margin-top: 40px; width: 100%; }
+
   .feature-grid { grid-template-columns: 1fr; }
   .who-list { grid-template-columns: 1fr 1fr; }
   .made-by { grid-template-columns: 1fr; gap: 40px; padding: 60px 24px; }
@@ -686,6 +692,21 @@ footer { padding: 32px 48px; border-top: 1px solid rgba(255,255,255,0.06); displ
   <div class="callouts-inner">
     <div class="callouts-label">How it works</div>
     <div class="callouts-title">Everything your team needs,<br><span>built into one place.</span></div>
+
+    <!-- MOBILE ONLY: just the phone, no callouts -->
+    <div class="callouts-mobile-phone" style="display:none;justify-content:center;margin-bottom:0">
+      <div style="width:220px;height:440px;background:#111118;border-radius:32px;border:1.5px solid rgba(255,255,255,0.1);overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,0.8),0 30px 60px rgba(0,0,0,0.6)">
+        <div style="width:100%;height:100%;background:#0c0c14;font-family:'Inter',sans-serif;overflow:hidden">
+          <div style="height:34px;padding:10px 14px 0;display:flex;align-items:center;justify-content:space-between;font-size:9px;font-weight:600;color:rgba(255,255,255,0.7)"><span>9:41</span><svg width="18" height="10" viewBox="0 0 20 11" fill="none"><rect x="0.5" y="0.5" width="17" height="10" rx="3" stroke="rgba(255,255,255,0.3)"/><rect x="2" y="2" width="13" height="7" rx="2" fill="rgba(255,255,255,0.7)"/></svg></div>
+          <div style="padding:8px 14px;display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:12px;font-weight:600;color:#ebebeb">Good evening, Jordan.</div><div style="font-size:9px;color:rgba(255,255,255,0.3);margin-top:1px">3 teams · 12 upcoming shows</div></div><div style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:white">JR</div></div>
+          <div style="padding:0 14px 8px;display:flex;gap:5px"><div style="padding:3px 7px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.07);border-radius:20px;font-size:8px;color:rgba(255,255,255,0.4)">12 Shows</div><div style="padding:3px 7px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.07);border-radius:20px;font-size:8px;color:rgba(255,255,255,0.4)">3 Releases</div></div>
+          <div style="margin:0 11px 8px;background:linear-gradient(135deg,rgba(200,255,0,0.07),rgba(200,255,0,0.02));border:1px solid rgba(200,255,0,0.12);border-radius:9px;padding:8px 10px;display:flex;align-items:center;gap:7px"><div style="background:rgba(200,255,0,0.1);border-radius:5px;padding:3px 5px;text-align:center"><div style="font-size:6px;font-weight:700;color:#c8ff00;letter-spacing:0.1em;text-transform:uppercase">APR</div><div style="font-size:13px;font-weight:700;color:#c8ff00;line-height:1">18</div></div><div><div style="font-size:10px;font-weight:600;color:#ebebeb">Madison Square Garden</div><div style="font-size:8px;color:rgba(255,255,255,0.3);margin-top:1px">New York, NY</div></div><div style="font-size:6px;font-weight:700;color:#c8ff00;background:rgba(200,255,0,0.1);padding:2px 5px;border-radius:3px;text-transform:uppercase;letter-spacing:0.05em">NEXT</div></div>
+          <div style="padding:0 14px 5px;font-size:7px;font-weight:600;letter-spacing:0.08em;color:rgba(255,255,255,0.2);text-transform:uppercase">Your Teams</div>
+          <div style="margin:0 11px 6px;background:#16161f;border-radius:9px;border:1px solid rgba(255,255,255,0.06);padding:8px 10px;display:flex;align-items:center;gap:7px"><div style="width:20px;height:20px;border-radius:4px;background:linear-gradient(135deg,#7C3AED,#5b21b6);flex-shrink:0"></div><div style="flex:1"><div style="font-size:10px;font-weight:600;color:#ebebeb">Nova Wave <span style="font-size:6px;background:rgba(124,58,237,0.2);color:#a78bfa;padding:2px 4px;border-radius:3px;text-transform:uppercase;letter-spacing:0.04em">Artist</span></div><div style="font-size:8px;color:rgba(255,255,255,0.25);margin-top:1px">8 members · 5 upcoming shows</div></div></div>
+          <div style="margin:0 11px 6px;background:#16161f;border-radius:9px;border:1px solid rgba(255,255,255,0.06);padding:8px 10px;display:flex;align-items:center;gap:7px"><div style="width:20px;height:20px;border-radius:4px;background:linear-gradient(135deg,#0ea5e9,#0369a1);flex-shrink:0"></div><div style="flex:1"><div style="font-size:10px;font-weight:600;color:#ebebeb">Apex Records <span style="font-size:6px;background:rgba(59,130,246,0.2);color:#93c5fd;padding:2px 4px;border-radius:3px;text-transform:uppercase;letter-spacing:0.04em">Label</span></div><div style="font-size:8px;color:rgba(255,255,255,0.25);margin-top:1px">4 members · 7 upcoming shows</div></div></div>
+        </div>
+      </div>
+    </div>
 
     <!-- DESKTOP: phone with animated callouts -->
     <div class="callouts-stage" id="callouts-stage">
@@ -888,9 +909,11 @@ footer { padding: 32px 48px; border-top: 1px solid rgba(255,255,255,0.06); displ
   const stage = document.getElementById('callouts-stage');
 
   // show mobile list on small screens
+  const mobilePhone = document.querySelector('.callouts-mobile-phone');
   function checkMobile() {
     const isMobile = window.innerWidth < 900;
     if (mobileList) mobileList.style.display = isMobile ? 'flex' : 'none';
+    if (mobilePhone) mobilePhone.style.display = isMobile ? 'flex' : 'none';
     if (stage) stage.style.display = isMobile ? 'none' : 'flex';
   }
   checkMobile();

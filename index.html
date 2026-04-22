@@ -1040,23 +1040,28 @@ a.text-link:hover::after, a:not([class]):hover::after {
       e.preventDefault();
       error.style.display = 'none';
       error.textContent = '';
+
       const email = emailInput.value.trim();
       if (!emailRe.test(email)) {
         showError('Please enter a valid email address.');
         return;
       }
-      const cb = 'mcjsonp_' + Date.now() + '_' + Math.floor(Math.random() * 1e6);
-      const url = form.action.replace('/subscribe/post?', '/subscribe/post-json?')
-        + '&EMAIL=' + encodeURIComponent(email)
-        + '&' + encodeURIComponent(honeypot.name) + '=' + encodeURIComponent(honeypot.value)
-        + '&c=' + cb;
-      const script = document.createElement('script');
+
+      // Generate a unique global identifier used as BOTH the ?c= query param
+      // and the window[...] property. Mailchimp's /subscribe/post-json endpoint
+      // responds with: CALLBACK_NAME({...}) — which executes at global scope,
+      // so the callback MUST be reachable via window[CALLBACK_NAME].
+      const callbackName = 'mcjsonp_' + Date.now() + '_' + Math.floor(Math.random() * 1e6);
+
       let settled = false;
+      let script;
+
       function cleanup() {
-        delete window[cb];
-        if (script.parentNode) script.parentNode.removeChild(script);
+        try { delete window[callbackName]; } catch (_) { window[callbackName] = undefined; }
+        if (script && script.parentNode) script.parentNode.removeChild(script);
       }
-      window[cb] = function(response) {
+
+      function onResponse(response) {
         if (settled) return;
         settled = true;
         cleanup();
@@ -1074,14 +1079,26 @@ a.text-link:hover::after, a:not([class]):hover::after {
           const cleaned = raw.replace(/^\d+\s*-\s*/, '').trim();
           showError(cleaned || 'Something went wrong. Please try again.');
         }
-      };
+      }
+
+      // Attach the callback to window scope BEFORE the script is injected,
+      // so Mailchimp's response — which runs CALLBACK_NAME(...) at global
+      // scope — can resolve the identifier.
+      window[callbackName] = onResponse;
+
+      const url = form.action.replace('/subscribe/post?', '/subscribe/post-json?')
+        + '&EMAIL=' + encodeURIComponent(email)
+        + '&' + encodeURIComponent(honeypot.name) + '=' + encodeURIComponent(honeypot.value)
+        + '&c=' + callbackName;
+
+      script = document.createElement('script');
+      script.src = url;
       script.onerror = function() {
         if (settled) return;
         settled = true;
         cleanup();
         showError("Couldn't reach the server. Please try again.");
       };
-      script.src = url;
       document.body.appendChild(script);
     });
   })();

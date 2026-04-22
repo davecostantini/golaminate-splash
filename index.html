@@ -443,6 +443,7 @@ section { padding: 100px 72px; border-bottom: 1px solid var(--border-card); max-
 }
 .apply-form button:hover { background: var(--text-primary); }
 .apply-fine { font-size: 11px; color: var(--text-tertiary); font-weight: 300; }
+.apply-error { display: none; font-size: 12px; color: var(--danger); font-weight: 400; letter-spacing: -0.005em; margin-top: 12px; }
 .apply-success { display: none; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 18px; letter-spacing: -0.01em; color: var(--teal); margin-top: 16px; }
 
 footer { padding: 32px 48px; border-top: 1px solid var(--border-card); display: flex; align-items: center; justify-content: space-between; }
@@ -588,30 +589,6 @@ h1, h2, .hero-headline, .callouts-title, .made-by-headline, .apply-headline, .fe
   .feature-title:hover {
     color: #def4ed;
   }
-}
-
-/* custom teal cursor dot */
-.cursor-dot {
-  position: fixed;
-  top: 0; left: 0;
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  background: var(--teal);
-  opacity: 0.5;
-  pointer-events: none;
-  z-index: 10000;
-  transform: translate(-50%, -50%);
-  transition: width 180ms ease, height 180ms ease, opacity 180ms ease;
-  display: none;
-}
-.cursor-dot.active {
-  width: 18px; height: 18px; opacity: 0.4;
-}
-@media (hover: hover) and (pointer: fine) {
-  .cursor-dot { display: block; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .cursor-dot { display: none !important; }
 }
 
 /* animated text link underlines — applies to plain text links, not buttons */
@@ -1019,12 +996,13 @@ a.text-link:hover::after, a:not([class]):hover::after {
   <div class="section-label" style="justify-content:center;margin-bottom:28px">Stay in touch</div>
   <h2 class="apply-headline">Stay in the<br><span class="acid">loop.</span></h2>
   <p class="apply-sub">Drop your email and we'll reach out when invites open wider.</p>
-  <form class="apply-form" id="applyForm" action="https://chemistrysession.us8.list-manage.com/subscribe/post?u=4fee5e40b822b47ce501&amp;id=e788109c94&amp;f_id=00e788109c94" method="post" target="_blank" novalidate>
+  <form class="apply-form" id="applyForm" action="https://gmail.us8.list-manage.com/subscribe/post?u=a72e5ca5eac70ea1ec0dfb615&amp;id=e788109c94&amp;f_id=00166ae0f0" method="post" novalidate>
     <input type="email" name="EMAIL" placeholder="your@email.com" required id="applyEmail" autocomplete="email"/>
-    <div style="position:absolute;left:-5000px;" aria-hidden="true"><input type="text" name="b_4fee5e40b822b47ce501_e788109c94" tabindex="-1" value=""></div>
+    <div style="position:absolute;left:-5000px;" aria-hidden="true"><input type="text" name="b_a72e5ca5eac70ea1ec0dfb615_e788109c94" tabindex="-1" value=""></div>
     <button type="submit" name="subscribe">Notify me</button>
   </form>
   <p class="apply-fine">We'll only reach out when there's news to share.</p>
+  <div class="apply-error" id="applyError" role="alert"></div>
   <div class="apply-success" id="applySuccess">You're on the list. Thanks for joining.</div>
 </div>
 
@@ -1036,28 +1014,6 @@ a.text-link:hover::after, a:not([class]):hover::after {
 <canvas id="film-grain"></canvas>
 
 <script>
-  // Custom teal cursor dot — desktop only, skipped for reduced-motion
-  (function initCursorDot() {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-    if (reduced || !canHover) return;
-    const dot = document.createElement('div');
-    dot.className = 'cursor-dot';
-    document.body.appendChild(dot);
-    let x = -100, y = -100;
-    window.addEventListener('mousemove', (e) => { x = e.clientX; y = e.clientY; });
-    function tick() {
-      dot.style.left = x + 'px';
-      dot.style.top = y + 'px';
-      requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-    document.querySelectorAll('a, button').forEach(el => {
-      el.addEventListener('mouseenter', () => dot.classList.add('active'));
-      el.addEventListener('mouseleave', () => dot.classList.remove('active'));
-    });
-  })();
-
   const words = document.querySelectorAll('.cycle-word');
   let current = 0;
   setInterval(() => {
@@ -1065,13 +1021,70 @@ a.text-link:hover::after, a:not([class]):hover::after {
     current = (current + 1) % words.length;
     words[current].classList.add('active');
   }, 2200);
-  document.getElementById('applyForm').addEventListener('submit', function() {
-    setTimeout(() => {
-      this.style.display = 'none';
-      document.getElementById('applySuccess').style.display = 'block';
-      document.querySelector('.apply-fine').style.display = 'none';
-    }, 800);
-  });
+  (function initMailchimpSubmit() {
+    const form = document.getElementById('applyForm');
+    if (!form) return;
+    const success = document.getElementById('applySuccess');
+    const error = document.getElementById('applyError');
+    const fine = document.querySelector('.apply-fine');
+    const emailInput = form.querySelector('input[type="email"]');
+    const honeypot = form.querySelector('input[name^="b_"]');
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    function showError(msg) {
+      error.textContent = msg;
+      error.style.display = 'block';
+    }
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      error.style.display = 'none';
+      error.textContent = '';
+      const email = emailInput.value.trim();
+      if (!emailRe.test(email)) {
+        showError('Please enter a valid email address.');
+        return;
+      }
+      const cb = 'mcjsonp_' + Date.now() + '_' + Math.floor(Math.random() * 1e6);
+      const url = form.action.replace('/subscribe/post?', '/subscribe/post-json?')
+        + '&EMAIL=' + encodeURIComponent(email)
+        + '&' + encodeURIComponent(honeypot.name) + '=' + encodeURIComponent(honeypot.value)
+        + '&c=' + cb;
+      const script = document.createElement('script');
+      let settled = false;
+      function cleanup() {
+        delete window[cb];
+        if (script.parentNode) script.parentNode.removeChild(script);
+      }
+      window[cb] = function(response) {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        if (response && response.result === 'success') {
+          form.style.display = 'none';
+          if (fine) fine.style.display = 'none';
+          success.style.display = 'block';
+          return;
+        }
+        const raw = (response && response.msg) || '';
+        const lower = raw.toLowerCase();
+        if (lower.indexOf('already subscribed') !== -1 || lower.indexOf('already a list member') !== -1) {
+          showError("You're already on the list.");
+        } else {
+          const cleaned = raw.replace(/^\d+\s*-\s*/, '').trim();
+          showError(cleaned || 'Something went wrong. Please try again.');
+        }
+      };
+      script.onerror = function() {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        showError("Couldn't reach the server. Please try again.");
+      };
+      script.src = url;
+      document.body.appendChild(script);
+    });
+  })();
 
   // Scroll-triggered callouts
   const callouts = document.querySelectorAll('.callout');

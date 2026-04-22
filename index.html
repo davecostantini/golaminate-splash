@@ -1065,20 +1065,23 @@ a.text-link:hover::after, a:not([class]):hover::after {
         if (settled) return;
         settled = true;
         cleanup();
+        // Check msg for "already subscribed" pattern FIRST — Mailchimp returns
+        // result: "success" even for duplicates, so result-based branching
+        // alone would swallow the duplicate case.
+        const raw = (response && response.msg) || '';
+        const lower = raw.toLowerCase();
+        if (lower.indexOf('already subscribed') !== -1 || lower.indexOf('already a list member') !== -1) {
+          showError("You're already on the list.");
+          return;
+        }
         if (response && response.result === 'success') {
           form.style.display = 'none';
           if (fine) fine.style.display = 'none';
           success.style.display = 'block';
           return;
         }
-        const raw = (response && response.msg) || '';
-        const lower = raw.toLowerCase();
-        if (lower.indexOf('already subscribed') !== -1 || lower.indexOf('already a list member') !== -1) {
-          showError("You're already on the list.");
-        } else {
-          const cleaned = raw.replace(/^\d+\s*-\s*/, '').trim();
-          showError(cleaned || 'Something went wrong. Please try again.');
-        }
+        const cleaned = raw.replace(/^\d+\s*-\s*/, '').trim();
+        showError(cleaned || 'Something went wrong. Please try again.');
       }
 
       // Attach the callback to window scope BEFORE the script is injected,

@@ -449,8 +449,43 @@ footer { padding: 32px 48px; border-top: 1px solid var(--border-card); display: 
 .footer-logo { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.32em; color: var(--text-tertiary); }
 .footer-right { font-size: 11px; color: var(--text-tertiary); font-weight: 300; }
 
-.cycle-word { display: none; color: var(--teal); }
-.cycle-word.active { display: inline; }
+.role-cycle {
+  display: inline-block;
+  position: relative;
+  perspective: 600px;
+  vertical-align: baseline;
+  color: var(--teal);
+}
+.role-cycle-spacer {
+  display: inline-block;
+  visibility: hidden;
+  white-space: nowrap;
+}
+.role-cycle-panel {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  display: inline-block;
+  text-align: center;
+  white-space: nowrap;
+  transform-origin: 50% 50%;
+  backface-visibility: hidden;
+  will-change: transform;
+  transition: transform 600ms cubic-bezier(0.5, 0, 0.5, 1);
+}
+.role-cycle-panel.is-current { transform: rotateX(0deg); }
+.role-cycle-panel.is-next    { transform: rotateX(-90deg); }
+.role-cycle-panel.is-out     { transform: rotateX(90deg); }
+.role-cycle-panel.no-transition { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  .role-cycle-panel {
+    transform: none !important;
+    transition: opacity 240ms ease-in-out;
+  }
+  .role-cycle-panel.is-current { opacity: 1; }
+  .role-cycle-panel.is-next,
+  .role-cycle-panel.is-out { opacity: 0; }
+}
 
 /* CALLOUTS SECTION */
 .callouts-section {
@@ -671,22 +706,15 @@ a.text-link:hover::after, a:not([class]):hover::after {
       <span class="hero-pill-text">Invite only · Applications open</span>
     </div>
 
-    <div class="hero-headline">
-      The private network<br>
-      for the <span class="acid">
-        <span class="cycle-word active">music industry.</span>
-        <span class="cycle-word">touring world.</span>
-        <span class="cycle-word">people who build it.</span>
-      </span>
-    </div>
+    <div class="hero-headline">The music industry deserves better than group chats.</div>
 
     <div class="hero-divider"></div>
 
-    <p class="hero-body">Tour managers, booking agents, labels, venues, and everyone in between — all in one private, vetted space built for the people who actually run the industry.</p>
+    <p class="hero-body">A private, invite-only network for the music industry — built to organize the chaos and connect the <span class="role-cycle" aria-live="polite"><span class="role-cycle-spacer" aria-hidden="true">Photographers</span><span class="role-cycle-panel"></span><span class="role-cycle-panel"></span></span> who keep it running.</p>
 
     <div class="hero-cta">
-      <a href="https://app.golaminate.com/apply/start" class="btn-primary">Request access</a>
-      <a href="#features" class="btn-secondary">Learn more →</a>
+      <a href="https://app.golaminate.com/apply/start" class="btn-primary">Apply for access</a>
+      <a href="#features" class="btn-secondary">How it works ↓</a>
     </div>
 
     <div class="hero-proof">
@@ -1012,13 +1040,52 @@ a.text-link:hover::after, a:not([class]):hover::after {
 <canvas id="film-grain"></canvas>
 
 <script>
-  const words = document.querySelectorAll('.cycle-word');
-  let current = 0;
-  setInterval(() => {
-    words[current].classList.remove('active');
-    current = (current + 1) % words.length;
-    words[current].classList.add('active');
-  }, 2200);
+  (function initRoleCycle() {
+    const ROLES = [
+      'Tour managers', 'Agents', 'Managers', 'Artists', 'Production',
+      'Labels', 'Venues', 'Photographers', 'Press', 'Promoters'
+    ];
+    const root = document.querySelector('.role-cycle');
+    if (!root) return;
+    const panels = root.querySelectorAll('.role-cycle-panel');
+    if (panels.length < 2) return;
+
+    let current = panels[0];
+    let next = panels[1];
+    let idx = 0;
+
+    current.textContent = ROLES[0];
+    next.textContent = ROLES[1];
+    current.classList.add('is-current');
+    next.classList.add('is-next');
+
+    const TICK_MS = 1800;
+    const FLIP_MS = 600;
+
+    setInterval(() => {
+      idx = (idx + 1) % ROLES.length;
+
+      current.classList.remove('is-current');
+      current.classList.add('is-out');
+      next.classList.remove('is-next');
+      next.classList.add('is-current');
+
+      const recycled = current;
+      const upcoming = next;
+
+      setTimeout(() => {
+        recycled.classList.add('no-transition');
+        recycled.classList.remove('is-out');
+        recycled.classList.add('is-next');
+        recycled.textContent = ROLES[(idx + 1) % ROLES.length];
+        void recycled.offsetWidth;
+        recycled.classList.remove('no-transition');
+      }, FLIP_MS);
+
+      current = upcoming;
+      next = recycled;
+    }, TICK_MS);
+  })();
   (function initMailchimpSubmit() {
     const form = document.getElementById('applyForm');
     if (!form) return;

@@ -175,21 +175,6 @@ nav {
 }
 .btn-secondary:hover { color: var(--text-primary); border-color: var(--border-emphasis); }
 
-/* SOCIAL PROOF */
-.hero-proof { display: flex; align-items: center; gap: 12px; }
-.proof-avatars { display: flex; }
-.proof-avatar {
-  width: 28px; height: 28px; border-radius: 50%;
-  border: 2px solid var(--bg);
-  margin-left: -7px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 9px; font-weight: 600; color: var(--text-primary);
-  font-family: 'Inter', sans-serif;
-}
-.proof-avatar:first-child { margin-left: 0; }
-.proof-text { font-size: 11px; color: var(--text-secondary); font-weight: 400; }
-.proof-text span { color: var(--text-primary); font-weight: 500; }
-
 /* PHONE MOCKUP */
 .phone-wrap { animation: phoneFloat 7s ease-in-out infinite; }
 .phone {
@@ -659,7 +644,6 @@ a.text-link:hover::after, a:not([class]):hover::after {
   .hero-pill { align-self: center; }
   .hero-body { text-align: left; }
   .hero-cta { justify-content: center; }
-  .hero-proof { justify-content: center; }
   section { padding: 60px 24px; }
   .callouts-section { padding: 60px 0; }
   .callouts-inner { padding: 0 24px; }
@@ -717,17 +701,6 @@ a.text-link:hover::after, a:not([class]):hover::after {
     <div class="hero-cta">
       <a href="https://app.golaminate.com/apply/start" class="btn-primary">Apply for access</a>
       <a href="#features" class="btn-secondary">How it works ↓</a>
-    </div>
-
-    <div class="hero-proof">
-      <div class="proof-avatars">
-        <div class="proof-avatar" style="background:#5DCAA5;color:#0c0c14">JR</div>
-        <div class="proof-avatar" style="background:#9E8CFC">MK</div>
-        <div class="proof-avatar" style="background:#1e1e2a;color:rgba(255,255,255,0.7)">SR</div>
-        <div class="proof-avatar" style="background:rgba(93,202,165,0.55);color:#0c0c14">AL</div>
-        <div class="proof-avatar" style="background:rgba(158,140,252,0.55)">TP</div>
-      </div>
-      <span class="proof-text">Trusted by <span>pros across the industry</span></span>
     </div>
   </div>
 

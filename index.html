@@ -437,11 +437,11 @@ footer { padding: 32px 48px; border-top: 1px solid var(--border-card); display: 
 .role-cycle {
   display: inline-block;
   position: relative;
-  perspective: 600px;
   vertical-align: baseline;
   color: var(--teal);
   font-weight: 600;
   text-align: center;
+  overflow: hidden;
 }
 .role-cycle-spacer {
   display: inline-block;
@@ -455,14 +455,14 @@ footer { padding: 32px 48px; border-top: 1px solid var(--border-card); display: 
   display: inline-block;
   text-align: center;
   white-space: nowrap;
-  transform-origin: 50% 50%;
-  backface-visibility: hidden;
-  will-change: transform;
-  transition: transform 600ms cubic-bezier(0.5, 0, 0.5, 1);
+  will-change: transform, opacity;
+  transition:
+    transform 400ms cubic-bezier(0.23, 1, 0.32, 1),
+    opacity 400ms cubic-bezier(0.23, 1, 0.32, 1);
 }
-.role-cycle-panel.is-current { transform: rotateX(0deg); }
-.role-cycle-panel.is-next    { transform: rotateX(-90deg); }
-.role-cycle-panel.is-out     { transform: rotateX(90deg); }
+.role-cycle-panel.is-current { transform: translateY(0);     opacity: 1; }
+.role-cycle-panel.is-next    { transform: translateY(100%);  opacity: 0; }
+.role-cycle-panel.is-out     { transform: translateY(-100%); opacity: 0; }
 .role-cycle-panel.no-transition { transition: none; }
 @media (prefers-reduced-motion: reduce) {
   .role-cycle-panel {
